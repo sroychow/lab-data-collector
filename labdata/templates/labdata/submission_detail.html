@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Submission</p>
+    <h1>{{ submission.experiment.title }}</h1>
+    <p class="muted">Submitted by {{ submission.submitted_by }} on {{ submission.created_at }}</p>
+  </div>
+</section>
+
+<section class="card">
+  <div class="grid two">
+    <p><strong>Sample / Run ID:</strong> {{ submission.sample_id|default:'—' }}</p>
+    <p><strong>Status:</strong> {{ submission.status }}</p>
+  </div>
+  {% if submission.notes %}<p><strong>Notes:</strong> {{ submission.notes }}</p>{% endif %}
+</section>
+
+<section class="card">
+  <h2>Observation rows</h2>
+  <div class="responsive-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Serial No.</th>
+          {% for field in submission.experiment.fields.all %}
+            <th>{{ field.name }}{% if field.unit %} <span class="unit">({{ field.unit }})</span>{% endif %}{% if field.is_derived %}<span class="badge derived">calculated</span>{% endif %}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in submission.rows.all %}
+          <tr>
+            <td>{{ row.serial_number }}</td>
+            {% for field in submission.experiment.fields.all %}
+              <td>
+                {% for value in row.values.all %}
+                  {% if value.field_id == field.id %}{{ value.value }}{% endif %}
+                {% endfor %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% empty %}
+          <tr><td colspan="99">No observation rows found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{% if submission.attachments.all %}
+<section class="card">
+  <h2>Attachments</h2>
+  <ul>
+    {% for attachment in submission.attachments.all %}
+      <li><a href="{{ attachment.file.url }}">{{ attachment.file.name }}</a> — {{ attachment.description }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

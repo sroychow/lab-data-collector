@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}{{ experiment.title }} | LabVault{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><p class="eyebrow">{{ experiment.course_or_project|default:'Lab experiment' }}</p><h1>{{ experiment.title }}</h1><p>{{ experiment.objective }}</p></div>
+  <div class="actions"><a class="primary" href="{% url 'submit_data' experiment.slug %}">Submit data</a><a class="secondary" href="{% url 'export_csv' experiment.slug %}">Export CSV</a></div>
+</div>
+<section class="panel">
+  <h2>Data fields</h2>
+  <div class="field-list">
+    {% for field in experiment.fields.all %}
+      <div><strong>{{ field.name }}</strong><span>{{ field.get_field_type_display }}{% if field.unit %} · {{ field.unit }}{% endif %}</span></div>
+    {% empty %}<p>No fields defined yet. Add fields from Django admin.</p>{% endfor %}
+  </div>
+</section>
+<section class="panel">
+  <div class="panel-head"><h2>Submissions</h2><span>{{ experiment.submissions.count }} total</span></div>
+  <div class="table-wrap"><table><thead><tr><th>Time</th><th>Sample</th><th>User</th><th>Status</th><th></th></tr></thead><tbody>
+    {% for sub in submissions %}<tr><td>{{ sub.created_at|date:'d M Y, H:i' }}</td><td>{{ sub.sample_id|default:'—' }}</td><td>{{ sub.submitted_by|default:'—' }}</td><td><span class="pill">{{ sub.get_status_display }}</span></td><td><a href="{% url 'submission_detail' sub.id %}">Open</a></td></tr>
+    {% empty %}<tr><td colspan="5">No data submitted yet.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+{% endblock %}

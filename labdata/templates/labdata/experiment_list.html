@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Experiments | LabVault{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><p class="eyebrow">Experiment registry</p><h1>Experiments</h1></div>
+  {% if user.is_staff %}<a class="primary" href="{% url 'experiment_create' %}">New experiment</a>{% endif %}
+</div>
+<div class="card-grid">
+  {% for exp in experiments %}
+  <article class="experiment-card">
+    <div class="card-top"><span class="pill {{ exp.status }}">{{ exp.get_status_display }}</span><span>{{ exp.protocol_version }}</span></div>
+    <h2><a href="{% url 'experiment_detail' exp.slug %}">{{ exp.title }}</a></h2>
+    <p>{{ exp.objective|truncatewords:24|default:'No objective added yet.' }}</p>
+    <div class="meta"><span>{{ exp.course_or_project|default:'General lab' }}</span><span>{{ exp.submissions.count }} submissions</span></div>
+  </article>
+  {% empty %}<div class="panel">No experiments yet. Create one from the admin/staff account.</div>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard | LabVault{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Research & teaching laboratories</p>
+    <h1>Collect, preserve, and export lab data.</h1>
+    <p>Define experiments, collect structured measurements, upload raw instrument files, and keep every submission timestamped.</p>
+  </div>
+  <div class="hero-actions">
+    <a class="primary" href="{% url 'experiment_list' %}">View experiments</a>
+    {% if user.is_staff %}<a class="secondary" href="{% url 'experiment_create' %}">Create experiment</a>{% endif %}
+  </div>
+</section>
+
+<div class="stats-grid">
+  <div class="stat-card"><span>Experiments</span><strong>{{ experiments.count }}</strong></div>
+  <div class="stat-card"><span>Submissions</span><strong>{{ total_submissions }}</strong></div>
+  <div class="stat-card"><span>Preservation</span><strong>Raw + metadata</strong></div>
+</div>
+
+<section class="panel">
+  <div class="panel-head"><h2>Recent submissions</h2><a href="{% url 'experiment_list' %}">All experiments →</a></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Time</th><th>Experiment</th><th>Sample</th><th>User</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for sub in recent %}
+        <tr>
+          <td>{{ sub.created_at|date:'d M Y, H:i' }}</td>
+          <td><a href="{% url 'submission_detail' sub.id %}">{{ sub.experiment.title }}</a></td>
+          <td>{{ sub.sample_id|default:'—' }}</td>
+          <td>{{ sub.submitted_by|default:'—' }}</td>
+          <td><span class="pill">{{ sub.get_status_display }}</span></td>
+        </tr>
+        {% empty %}<tr><td colspan="5">No submissions yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

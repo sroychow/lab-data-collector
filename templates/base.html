@@ -1,0 +1,42 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Lab Data Collector{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">LD</div>
+        <div>
+          <strong>LabVault</strong>
+          <span>Data collection system</span>
+        </div>
+      </div>
+      <nav>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'experiment_list' %}">Experiments</a>
+        <a href="/admin/">Admin</a>
+      </nav>
+      <div class="sidebar-foot">
+        {% if user.is_authenticated %}
+          <span>Signed in as <strong>{{ user.username }}</strong></span>
+          <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button>Logout</button></form>
+        {% endif %}
+      </div>
+    </aside>
+    <main class="main">
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}
+        </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
