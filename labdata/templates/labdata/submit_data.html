@@ -65,7 +65,7 @@
                 {% elif field.field_type == 'integer' %}
                   <input type="number" step="1" name="row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}>
                 {% elif field.field_type == 'decimal' %}
-                  <input type="text" inputmode="decimal" name="field_{{ row.serial_number }}_{{ field.id }}" value="{{ value }}" placeholder="Enter value" {% if field.required %}required{% endif %}>
+                  <input type="text" inputmode="decimal" name="row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %} placeholder="Enter value">
                 {% elif field.field_type == 'date' %}
                   <input type="date" name="row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}>
                 {% elif field.field_type == 'boolean' %}
@@ -112,7 +112,7 @@ function inputForField(rowIndex, field) {
   } else if (field.type === 'integer') {
     html = `<input type="number" step="1" name="row_${rowIndex}_field_${field.id}" ${required}>`;
   } else if (field.type === 'decimal') {
-    html = `<input type="number" step="any" name="row_${rowIndex}_field_${field.id}" ${required}>`;
+    html = `<input type="text" inputmode="decimal" name="row_${rowIndex}_field_${field.id}" ${required} placeholder="Enter value">`;
   } else if (field.type === 'date') {
     html = `<input type="date" name="row_${rowIndex}_field_${field.id}" ${required}>`;
   } else if (field.type === 'boolean') {

@@ -47,6 +47,8 @@ class DynamicTableSubmissionForm(forms.Form):
                 raw = self.data.get(key, '')
                 if isinstance(raw, str):
                     raw = raw.strip()
+                    if field.field_type == 'decimal':
+                        raw = raw.replace(',', '.')
                 if raw not in ('', None):
                     has_any_value = True
                 values[field.id] = raw
