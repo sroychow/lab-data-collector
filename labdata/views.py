@@ -17,7 +17,8 @@ from .models import (
     PlotConfig
 )
 from .safe_formula import FormulaError, evaluate_formula, format_result
-
+import json
+from .plotting import build_plot_data
 
 def build_complete_row_values(fields, input_values):
     complete_values = dict(input_values)
@@ -153,28 +154,49 @@ def experiment_detail(request, experiment_id):
 
 '''
 @login_required
-def submission_detail(request, submission_id):
+def submission_detail(request, pk):
     submission = get_object_or_404(
-        Submission.objects.select_related("experiment", "submitted_by"),
-        id=submission_id,
+        Submission.objects
+        .select_related("experiment", "submitted_by")
+        .prefetch_related("rows__values", "rows__values__field", "attachments"),
+        pk=pk,
     )
 
     plot_configs = (
         PlotConfig.objects
-        .filter(
-            table__experiment=submission.experiment,
-            is_active=True,
-        )
-        .select_related("table", "x_field", "y_field")
+        .filter(experiment=submission.experiment, is_active=True)
+        .select_related("x_field", "y_field")
         .order_by("order", "id")
     )
 
     return render(request, "labdata/submission_detail.html", {
         "submission": submission,
-        "experiment": submission.experiment,
         "plot_configs": plot_configs,
     })
 
+@login_required
+def submission_plot_detail(request, pk, plot_id):
+    submission = get_object_or_404(
+        Submission.objects.select_related("experiment", "submitted_by"),
+        pk=pk,
+    )
+
+    plot_config = get_object_or_404(
+        PlotConfig.objects.select_related("experiment", "x_field", "y_field"),
+        pk=plot_id,
+        experiment=submission.experiment,
+        is_active=True,
+    )
+
+    chart_data = build_plot_data(plot_config, submission)
+
+    return render(request, "labdata/plot_detail.html", {
+        "submission": submission,
+        "experiment": submission.experiment,
+        "plot_config": plot_config,
+        "chart_data_json": json.dumps(chart_data),
+        "point_count": len(chart_data),
+    })
 
 @login_required
 def plot_detail(request, plot_id, submission_id=None):

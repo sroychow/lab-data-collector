@@ -1,86 +1,108 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block title %}{{ plot_config.title }} | LabVault{% endblock %}
 
 {% block content %}
 <section class="card">
-    <div class="page-header">
-        <div>
-            <h1>{{ plot_config.title }}</h1>
-            <p class="muted">
-                Experiment: {{ experiment.title }}
-                {% if submission %}
-                    · Entry: {{ submission.sample_id|default:submission.id }}
-                {% else %}
-                    · All submissions
-                {% endif %}
-            </p>
-        </div>
+    <p class="eyebrow">Plot</p>
+    <h1>{{ plot_config.title }}</h1>
 
-        {% if submission %}
-            <a class="btn btn-secondary" href="{% url 'submission_detail' submission.id %}">
-                Back to entry
-            </a>
-        {% else %}
-            <a class="btn btn-secondary" href="{% url 'experiment_detail' experiment.slug %}">
-                Back to experiment
-            </a>
-        {% endif %}
+    <p class="muted">
+        Experiment: {{ experiment.title }}
+        · Entry: {{ submission.sample_id|default:submission.pk }}
+        · Points: {{ point_count }}
+    </p>
+
+    <div class="actions">
+        <a class="btn btn-secondary" href="{% url 'submission_detail' submission.pk %}">
+            Back to submission
+        </a>
     </div>
+</section>
 
-    {% if chart_data %}
+<section class="card">
+    {% if point_count %}
         <canvas id="labPlot" height="120"></canvas>
     {% else %}
-        <p>No numeric data available for this plot.</p>
+        <p>
+            No numeric data was available for this plot. Check that the selected
+            X and Y fields contain numeric values for this submission.
+        </p>
     {% endif %}
 </section>
 
-{% if chart_data %}
+{% if point_count %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const chartData = {{ chart_data|safe }};
-
-const xyData = chartData.map(p => ({x: p.x, y: p.y}));
+const chartData = {{ chart_data_json|safe }};
+const chartType = "{{ plot_config.chart_type|escapejs }}";
 
 const ctx = document.getElementById("labPlot");
 
-new Chart(ctx, {
-    type: "{{ plot_config.chart_type }}" === "line" ? "line" : "scatter",
-    data: {
-        datasets: [{
-            label: "{{ plot_config.title|escapejs }}",
-            data: xyData,
-            showLine: "{{ plot_config.chart_type }}" === "line",
-            tension: 0.15
-        }]
-    },
-    options: {
-        responsive: true,
-        parsing: false,
-        scales: {
-            x: {
-                type: "linear",
-                title: {
-                    display: true,
-                    text: "{{ plot_config.x_axis_label|default:plot_config.x_field.name|escapejs }}"
-                }
-            },
-            y: {
-                title: {
-                    display: true,
-                    text: "{{ plot_config.y_axis_label|default:plot_config.y_field.name|escapejs }}"
-                }
-            }
+let chartConfig;
+
+if (chartType === "bar") {
+    chartConfig = {
+        type: "bar",
+        data: {
+            labels: chartData.map(p => p.serial_number),
+            datasets: [{
+                label: "{{ plot_config.title|escapejs }}",
+                data: chartData.map(p => p.y)
+            }]
         },
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        return "x = " + context.parsed.x + ", y = " + context.parsed.y;
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Serial number"
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "{{ plot_config.y_axis_label|default:plot_config.y_field.name|escapejs }}"
                     }
                 }
             }
         }
-    }
-});
+    };
+} else {
+    chartConfig = {
+        type: "scatter",
+        data: {
+            datasets: [{
+                label: "{{ plot_config.title|escapejs }}",
+                data: chartData.map(p => ({x: p.x, y: p.y})),
+                showLine: chartType === "line",
+                tension: 0.15
+            }]
+        },
+        options: {
+            responsive: true,
+            parsing: false,
+            scales: {
+                x: {
+                    type: "linear",
+                    title: {
+                        display: true,
+                        text: "{{ plot_config.x_axis_label|default:plot_config.x_field.name|escapejs }}"
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "{{ plot_config.y_axis_label|default:plot_config.y_field.name|escapejs }}"
+                    }
+                }
+            }
+        }
+    };
+}
+
+new Chart(ctx, chartConfig);
 </script>
 {% endif %}
 {% endblock %}

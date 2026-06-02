@@ -44,21 +44,22 @@
 {% endfor %}
 {% if plot_configs %}
 <section class="card">
-    <h2>Plots for this lab entry</h2>
+    <h2>Plots for this entry</h2>
     <p class="muted">
-        These plots are defined once by the admin, but generated using only this submitted entry.
+        These plots are defined once in Django admin and generated using only this submission.
     </p>
 
-    <div class="plot-list">
+    <div class="actions">
         {% for plot in plot_configs %}
             <a class="btn btn-secondary"
-               href="{% url 'submission_plot_detail' submission.id plot.id %}">
+               href="{% url 'submission_plot_detail' submission.pk plot.pk %}">
                 {{ plot.title }}
             </a>
         {% endfor %}
     </div>
 </section>
 {% endif %}
+
 {% if submission.result_values.all %}
   <section class="card table-section">
     <h2>Final results</h2>

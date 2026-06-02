@@ -10,5 +10,6 @@ urlpatterns = [
     path('experiments/<slug:slug>/export.csv', views.export_csv, name='export_csv'),
     path('submissions/<int:pk>/', views.submission_detail, name='submission_detail'),
     path("plots/<int:plot_id>/", views.plot_detail, name="plot_detail"),
-    path("submissions/<int:submission_id>/plots/<int:plot_id>/",views.plot_detail,name="submission_plot_detail"),
+    #path("submissions/<int:submission_id>/plots/<int:plot_id>/",views.plot_detail,name="submission_plot_detail"),
+    path("submissions/<int:pk>/plots/<int:plot_id>/",views.submission_plot_detail,name="submission_plot_detail",),
 ]
