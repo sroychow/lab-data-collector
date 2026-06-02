@@ -9,14 +9,22 @@
 
     <p class="muted">
         Experiment: {{ experiment.title }}
-        · Entry: {{ submission.sample_id|default:submission.pk }}
+        {% if submission %}
+            · Entry: {{ submission.sample_id|default:submission.pk }}
+        {% endif %}
         · Points: {{ point_count }}
     </p>
 
     <div class="actions">
-        <a class="btn btn-secondary" href="{% url 'submission_detail' submission.pk %}">
-            Back to submission
-        </a>
+        {% if submission %}
+            <a class="btn btn-secondary" href="{% url 'submission_detail' submission.pk %}">
+                Back to submission
+            </a>
+        {% else %}
+            <a class="btn btn-secondary" href="{% url 'experiment_detail' experiment.slug %}">
+                Back to experiment
+            </a>
+        {% endif %}
     </div>
 </section>
 
@@ -95,6 +103,15 @@ if (chartType === "bar") {
                     title: {
                         display: true,
                         text: "{{ plot_config.y_axis_label|default:plot_config.y_field.name|escapejs }}"
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return "x = " + context.parsed.x + ", y = " + context.parsed.y;
+                        }
                     }
                 }
             }

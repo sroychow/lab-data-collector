@@ -1,5 +1,7 @@
 from decimal import Decimal, InvalidOperation
 
+from .models import ObservationRow
+
 
 def _to_float(value):
     if value is None:
@@ -18,15 +20,17 @@ def _to_float(value):
 
 
 def build_plot_data(plot_config, submission):
-    """
-    Build x-y data for one submitted lab entry.
+    '''
+    Build x-y plot data for one submitted lab entry.
 
-    The admin defines PlotConfig once for the experiment.
-    This function filters the plotted data to one submission only.
-    """
+    PlotConfig is defined once by the admin for an ExperimentTable.
+    This function uses only rows belonging to the selected Submission and
+    selected table, so every lab entry gets its own plot.
+    '''
 
     rows = (
-        submission.rows
+        ObservationRow.objects
+        .filter(submission=submission, table=plot_config.table)
         .prefetch_related("values", "values__field")
         .order_by("serial_number", "id")
     )
