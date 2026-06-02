@@ -1,4 +1,5 @@
 from decimal import Decimal, InvalidOperation
+from math import sqrt
 
 from .models import ObservationRow
 
@@ -20,14 +21,6 @@ def _to_float(value):
 
 
 def build_plot_data(plot_config, submission):
-    '''
-    Build x-y plot data for one submitted lab entry.
-
-    PlotConfig is defined once by the admin for an ExperimentTable.
-    This function uses only rows belonging to the selected Submission and
-    selected table, so every lab entry gets its own plot.
-    '''
-
     rows = (
         ObservationRow.objects
         .filter(submission=submission, table=plot_config.table)
@@ -59,3 +52,76 @@ def build_plot_data(plot_config, submission):
         })
 
     return data
+
+
+def linear_fit(plot_data):
+    '''
+    Ordinary least-squares straight-line fit: y = m*x + c.
+
+    Returns:
+        fit_result: dict with slope, intercept, r, r_squared, n
+        fit_line: two points spanning min(x) to max(x), suitable for Chart.js
+    '''
+
+    points = [
+        (float(point["x"]), float(point["y"]))
+        for point in plot_data
+        if point.get("x") is not None and point.get("y") is not None
+    ]
+
+    n = len(points)
+    if n < 2:
+        return None, []
+
+    xs = [p[0] for p in points]
+    ys = [p[1] for p in points]
+
+    mean_x = sum(xs) / n
+    mean_y = sum(ys) / n
+
+    ss_xx = sum((x - mean_x) ** 2 for x in xs)
+    ss_yy = sum((y - mean_y) ** 2 for y in ys)
+    ss_xy = sum((x - mean_x) * (y - mean_y) for x, y in points)
+
+    if ss_xx == 0:
+        return {
+            "error": "Cannot fit a straight line because all x values are identical.",
+            "n": n,
+        }, []
+
+    slope = ss_xy / ss_xx
+    intercept = mean_y - slope * mean_x
+
+    if ss_xx > 0 and ss_yy > 0:
+        r = ss_xy / sqrt(ss_xx * ss_yy)
+        r_squared = r ** 2
+    else:
+        r = None
+        r_squared = None
+
+    x_min = min(xs)
+    x_max = max(xs)
+
+    fit_line = [
+        {"x": x_min, "y": slope * x_min + intercept},
+        {"x": x_max, "y": slope * x_max + intercept},
+    ]
+
+    fit_result = {
+        "fit_type": "linear",
+        "equation": "y = m x + c",
+        "slope": slope,
+        "intercept": intercept,
+        "r": r,
+        "r_squared": r_squared,
+        "n": n,
+    }
+
+    return fit_result, fit_line
+
+
+def build_fit(plot_config, plot_data):
+    if getattr(plot_config, "fit_type", "none") == "linear":
+        return linear_fit(plot_data)
+
+    return None, []

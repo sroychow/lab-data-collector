@@ -39,34 +39,87 @@
     {% endif %}
 </section>
 
+{% if fit_result %}
+<section class="card">
+    <h2>Curve fitting result</h2>
+
+    {% if fit_result.error %}
+        <p>{{ fit_result.error }}</p>
+    {% else %}
+        <div class="table-wrap">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Fit model</th>
+                        <td>y = m x + c</td>
+                    </tr>
+                    <tr>
+                        <th>Slope, m</th>
+                        <td>{{ fit_result.slope|floatformat:8 }}</td>
+                    </tr>
+                    <tr>
+                        <th>Intercept, c</th>
+                        <td>{{ fit_result.intercept|floatformat:8 }}</td>
+                    </tr>
+                    <tr>
+                        <th>Correlation coefficient, R</th>
+                        <td>{{ fit_result.r|floatformat:6 }}</td>
+                    </tr>
+                    <tr>
+                        <th>R²</th>
+                        <td>{{ fit_result.r_squared|floatformat:6 }}</td>
+                    </tr>
+                    <tr>
+                        <th>Points used</th>
+                        <td>{{ fit_result.n }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {% if plot_config.show_fit_equation %}
+            <p>
+                <strong>Fitted equation:</strong>
+                y = {{ fit_result.slope|floatformat:6 }} x
+                {% if fit_result.intercept >= 0 %}
+                    + {{ fit_result.intercept|floatformat:6 }}
+                {% else %}
+                    {{ fit_result.intercept|floatformat:6 }}
+                {% endif %}
+            </p>
+        {% endif %}
+    {% endif %}
+</section>
+{% endif %}
+
 {% if point_count %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const chartData = {{ chart_data_json|safe }};
+const fitLine = {{ fit_line_json|safe }};
 const chartType = "{{ plot_config.chart_type|escapejs }}";
 
 const ctx = document.getElementById("labPlot");
 
-let chartConfig;
+const datasets = [];
 
 if (chartType === "bar") {
-    chartConfig = {
+    datasets.push({
+        label: "{{ plot_config.title|escapejs }}",
+        data: chartData.map(p => p.y)
+    });
+
+    new Chart(ctx, {
         type: "bar",
         data: {
             labels: chartData.map(p => p.serial_number),
-            datasets: [{
-                label: "{{ plot_config.title|escapejs }}",
-                data: chartData.map(p => p.y)
-            }]
+            datasets: datasets
         },
         options: {
             responsive: true,
             scales: {
                 x: {
-                    title: {
-                        display: true,
-                        text: "Serial number"
-                    }
+                    title: { display: true, text: "Serial number" }
                 },
                 y: {
                     title: {
@@ -76,18 +129,30 @@ if (chartType === "bar") {
                 }
             }
         }
-    };
+    });
 } else {
-    chartConfig = {
+    datasets.push({
+        label: "{{ plot_config.title|escapejs }}",
+        data: chartData.map(p => ({x: p.x, y: p.y})),
+        showLine: chartType === "line",
+        tension: 0.15
+    });
+
+    if (fitLine.length === 2) {
+        datasets.push({
+            label: "Linear fit",
+            data: fitLine.map(p => ({x: p.x, y: p.y})),
+            type: "line",
+            showLine: true,
+            pointRadius: 0,
+            borderDash: [6, 4],
+            tension: 0
+        });
+    }
+
+    new Chart(ctx, {
         type: "scatter",
-        data: {
-            datasets: [{
-                label: "{{ plot_config.title|escapejs }}",
-                data: chartData.map(p => ({x: p.x, y: p.y})),
-                showLine: chartType === "line",
-                tension: 0.15
-            }]
-        },
+        data: { datasets: datasets },
         options: {
             responsive: true,
             parsing: false,
@@ -110,16 +175,14 @@ if (chartType === "bar") {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return "x = " + context.parsed.x + ", y = " + context.parsed.y;
+                            return context.dataset.label + ": x = " + context.parsed.x + ", y = " + context.parsed.y;
                         }
                     }
                 }
             }
         }
-    };
+    });
 }
-
-new Chart(ctx, chartConfig);
 </script>
 {% endif %}
 {% endblock %}

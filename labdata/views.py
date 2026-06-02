@@ -17,7 +17,7 @@ from .models import (
     ResultValue,
     Submission,
 )
-from .plotting import build_plot_data
+from .plotting import build_fit, build_plot_data
 from .safe_formula import FormulaError, evaluate_formula, format_result
 
 
@@ -220,7 +220,6 @@ def submit_data(request, slug):
             "Data submitted. Row-wise fields and final results were calculated automatically.",
         )
 
-        # Go directly to this entry so its plots are visible immediately.
         return redirect("submission_detail", pk=submission.pk)
 
     return render(
@@ -286,6 +285,7 @@ def submission_plot_detail(request, pk=None, submission_id=None, plot_id=None):
     )
 
     chart_data = build_plot_data(plot_config, submission)
+    fit_result, fit_line = build_fit(plot_config, chart_data)
 
     return render(
         request,
@@ -295,6 +295,8 @@ def submission_plot_detail(request, pk=None, submission_id=None, plot_id=None):
             "experiment": submission.experiment,
             "plot_config": plot_config,
             "chart_data_json": json.dumps(chart_data),
+            "fit_line_json": json.dumps(fit_line),
+            "fit_result": fit_result,
             "point_count": len(chart_data),
         },
     )
@@ -302,13 +304,6 @@ def submission_plot_detail(request, pk=None, submission_id=None, plot_id=None):
 
 @login_required
 def plot_detail(request, plot_id):
-    '''
-    Compatibility view for old experiment-level plot links.
-
-    Shows the selected PlotConfig using the most recent submission for the
-    same experiment. The preferred route is submission_plot_detail.
-    '''
-
     plot_config = get_object_or_404(
         PlotConfig.objects.select_related("table", "table__experiment", "x_field", "y_field"),
         pk=plot_id,
@@ -324,10 +319,11 @@ def plot_detail(request, plot_id):
 
     if submission is None:
         chart_data = []
-        point_count = 0
+        fit_result = None
+        fit_line = []
     else:
         chart_data = build_plot_data(plot_config, submission)
-        point_count = len(chart_data)
+        fit_result, fit_line = build_fit(plot_config, chart_data)
 
     return render(
         request,
@@ -337,7 +333,9 @@ def plot_detail(request, plot_id):
             "experiment": plot_config.table.experiment,
             "plot_config": plot_config,
             "chart_data_json": json.dumps(chart_data),
-            "point_count": point_count,
+            "fit_line_json": json.dumps(fit_line),
+            "fit_result": fit_result,
+            "point_count": len(chart_data),
         },
     )
 
