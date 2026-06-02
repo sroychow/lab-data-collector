@@ -1,15 +1,11 @@
-"""Safe mathematical formula evaluation for derived lab fields.
-
-Formulas are entered by staff users in DataField.calculation_formula and are
-computed row-by-row from variable names defined on the experiment fields.
-"""
-
+"""Safe mathematical formula evaluation for lab fields and final results."""
 from __future__ import annotations
 
 import ast
 import math
 import operator as op
 from decimal import Decimal
+from statistics import mean as statistics_mean, pstdev
 from typing import Any, Mapping
 
 
@@ -36,33 +32,76 @@ _ALLOWED_FUNCTIONS = {
     name: getattr(math, name)
     for name in [
         'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2',
-        'sinh', 'cosh', 'tanh',
-        'sqrt', 'log', 'log10', 'log2', 'exp',
-        'degrees', 'radians',
-        'ceil', 'floor', 'fabs', 'factorial',
+        'sinh', 'cosh', 'tanh', 'sqrt', 'log', 'log10', 'log2',
+        'exp', 'degrees', 'radians', 'ceil', 'floor', 'fabs', 'factorial',
     ]
 }
-_ALLOWED_FUNCTIONS.update({
-    'abs': abs,
-    'round': round,
-    'min': min,
-    'max': max,
-})
-
-_ALLOWED_CONSTANTS = {
-    'pi': math.pi,
-    'e': math.e,
-    'tau': math.tau,
-}
+_ALLOWED_FUNCTIONS.update({'abs': abs, 'round': round, 'min': min, 'max': max})
+_ALLOWED_CONSTANTS = {'pi': math.pi, 'e': math.e, 'tau': math.tau}
 
 
 def _to_number(value: Any, variable_name: str) -> float:
     if value in ('', None):
         raise FormulaError(f'Missing value for variable "{variable_name}".')
     try:
-        return float(Decimal(str(value)))
+        return float(Decimal(str(value).replace(',', '.')))
     except Exception as exc:
         raise FormulaError(f'Variable "{variable_name}" must be numeric.') from exc
+
+
+def _to_number_list(value: Any, label: str) -> list[float]:
+    if not isinstance(value, (list, tuple)):
+        raise FormulaError(f'"{label}" is not a table column.')
+    numbers = []
+    for item in value:
+        if item not in ('', None):
+            numbers.append(_to_number(item, label))
+    if not numbers:
+        raise FormulaError(f'No numeric values found for "{label}".')
+    return numbers
+
+
+def _resolve_attribute(node: ast.Attribute, variables: Mapping[str, Any]) -> tuple[str, Any]:
+    parts = []
+    current = node
+    while isinstance(current, ast.Attribute):
+        parts.append(current.attr)
+        current = current.value
+    if not isinstance(current, ast.Name):
+        raise FormulaError('Only table.field references are allowed.')
+    parts.append(current.id)
+    parts.reverse()
+
+    value: Any = variables
+    path = []
+    for part in parts:
+        path.append(part)
+        if isinstance(value, Mapping) and part in value:
+            value = value[part]
+        else:
+            raise FormulaError(f'Unknown variable or table column "{".".join(path)}".')
+    return '.'.join(parts), value
+
+
+def _aggregate(function_name: str, value: Any, label: str) -> float:
+    numbers = _to_number_list(value, label)
+    if function_name == 'mean':
+        return float(statistics_mean(numbers))
+    if function_name == 'sum':
+        return float(sum(numbers))
+    if function_name == 'min':
+        return float(min(numbers))
+    if function_name == 'max':
+        return float(max(numbers))
+    if function_name == 'count':
+        return float(len(numbers))
+    if function_name == 'first':
+        return float(numbers[0])
+    if function_name == 'last':
+        return float(numbers[-1])
+    if function_name == 'std':
+        return float(pstdev(numbers)) if len(numbers) > 1 else 0.0
+    raise FormulaError(f'Aggregate function "{function_name}" is not allowed.')
 
 
 def _eval_node(node: ast.AST, variables: Mapping[str, Any]) -> float:
@@ -74,7 +113,6 @@ def _eval_node(node: ast.AST, variables: Mapping[str, Any]) -> float:
             return float(node.value)
         raise FormulaError('Only numeric constants are allowed in formulas.')
 
-    # Python <3.8 compatibility if ever needed.
     if isinstance(node, ast.Num):  # pragma: no cover
         return float(node.n)
 
@@ -84,6 +122,12 @@ def _eval_node(node: ast.AST, variables: Mapping[str, Any]) -> float:
         if node.id in variables:
             return _to_number(variables[node.id], node.id)
         raise FormulaError(f'Unknown variable or constant "{node.id}".')
+
+    if isinstance(node, ast.Attribute):
+        label, value = _resolve_attribute(node, variables)
+        if isinstance(value, (list, tuple)):
+            raise FormulaError(f'Use an aggregate such as mean({label}) for table columns.')
+        return _to_number(value, label)
 
     if isinstance(node, ast.BinOp):
         operator_type = type(node.op)
@@ -103,10 +147,25 @@ def _eval_node(node: ast.AST, variables: Mapping[str, Any]) -> float:
         if not isinstance(node.func, ast.Name):
             raise FormulaError('Only direct function calls such as sin(x) are allowed.')
         function_name = node.func.id
-        if function_name not in _ALLOWED_FUNCTIONS:
-            raise FormulaError(f'Function "{function_name}" is not allowed.')
         if node.keywords:
             raise FormulaError('Keyword arguments are not allowed in formulas.')
+
+        aggregate_names = {'mean', 'sum', 'count', 'first', 'last', 'std'}
+        if function_name in aggregate_names:
+            if len(node.args) != 1:
+                raise FormulaError(f'{function_name}() takes exactly one table column.')
+            arg = node.args[0]
+            if not isinstance(arg, ast.Attribute):
+                raise FormulaError(f'{function_name}() must be used as {function_name}(table.field).')
+            label, value = _resolve_attribute(arg, variables)
+            return _aggregate(function_name, value, label)
+
+        if function_name in {'min', 'max'} and len(node.args) == 1 and isinstance(node.args[0], ast.Attribute):
+            label, value = _resolve_attribute(node.args[0], variables)
+            return _aggregate(function_name, value, label)
+
+        if function_name not in _ALLOWED_FUNCTIONS:
+            raise FormulaError(f'Function "{function_name}" is not allowed.')
         args = [_eval_node(arg, variables) for arg in node.args]
         try:
             return float(_ALLOWED_FUNCTIONS[function_name](*args))
@@ -117,17 +176,8 @@ def _eval_node(node: ast.AST, variables: Mapping[str, Any]) -> float:
 
 
 def evaluate_formula(formula: str, variables: Mapping[str, Any]) -> float:
-    """Evaluate a formula using only safe mathematical operations.
-
-    Examples:
-        length / time
-        2*pi*r
-        m*g*h
-        sin(theta*pi/180)
-        sqrt(x**2 + y**2)
-    """
     if not formula or not formula.strip():
-        raise FormulaError('A derived field must have a formula.')
+        raise FormulaError('A calculated field must have a formula.')
     try:
         tree = ast.parse(formula, mode='eval')
     except SyntaxError as exc:
@@ -136,7 +186,6 @@ def evaluate_formula(formula: str, variables: Mapping[str, Any]) -> float:
 
 
 def format_result(value: float) -> str:
-    """Format calculated values compactly without losing useful precision."""
     if math.isnan(value) or math.isinf(value):
         raise FormulaError('Formula produced a non-finite result.')
     return f'{value:.10g}'

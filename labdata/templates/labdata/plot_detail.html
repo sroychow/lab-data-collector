@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <div class="page-header">
+        <div>
+            <h1>{{ plot_config.title }}</h1>
+            <p class="muted">
+                Experiment: {{ experiment.title }}
+                {% if submission %}
+                    · Entry: {{ submission.sample_id|default:submission.id }}
+                {% else %}
+                    · All submissions
+                {% endif %}
+            </p>
+        </div>
+
+        {% if submission %}
+            <a class="btn btn-secondary" href="{% url 'submission_detail' submission.id %}">
+                Back to entry
+            </a>
+        {% else %}
+            <a class="btn btn-secondary" href="{% url 'experiment_detail' experiment.slug %}">
+                Back to experiment
+            </a>
+        {% endif %}
+    </div>
+
+    {% if chart_data %}
+        <canvas id="labPlot" height="120"></canvas>
+    {% else %}
+        <p>No numeric data available for this plot.</p>
+    {% endif %}
+</section>
+
+{% if chart_data %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const chartData = {{ chart_data|safe }};
+
+const xyData = chartData.map(p => ({x: p.x, y: p.y}));
+
+const ctx = document.getElementById("labPlot");
+
+new Chart(ctx, {
+    type: "{{ plot_config.chart_type }}" === "line" ? "line" : "scatter",
+    data: {
+        datasets: [{
+            label: "{{ plot_config.title|escapejs }}",
+            data: xyData,
+            showLine: "{{ plot_config.chart_type }}" === "line",
+            tension: 0.15
+        }]
+    },
+    options: {
+        responsive: true,
+        parsing: false,
+        scales: {
+            x: {
+                type: "linear",
+                title: {
+                    display: true,
+                    text: "{{ plot_config.x_axis_label|default:plot_config.x_field.name|escapejs }}"
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: "{{ plot_config.y_axis_label|default:plot_config.y_field.name|escapejs }}"
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return "x = " + context.parsed.x + ", y = " + context.parsed.y;
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-<section class="page-head">
-  <div>
-    <p class="eyebrow">New submission</p>
-    <h1>{{ experiment.title }}</h1>
-    <p class="muted">Enter repeated observations row-by-row. Derived fields are calculated automatically after submission.</p>
-  </div>
+<section class="page-header">
+  <p class="eyebrow">New submission</p>
+  <h1>{{ experiment.title }}</h1>
+  <p>Enter observations table-by-table. Row-wise calculated fields and final results are computed after submission.</p>
 </section>
 
 <form method="post" enctype="multipart/form-data" class="card form-card">
@@ -15,131 +13,152 @@
     <div class="alert alert-error">{{ form.non_field_errors }}</div>
   {% endif %}
 
-  <div class="grid two">
-    <label>Sample / Run ID
-      {{ form.sample_id }}
-    </label>
-    <label>Upload raw data file
-      {{ form.attachment }}
-    </label>
+  <div class="form-grid">
+    <label>Sample / Run ID {{ form.sample_id }}</label>
+    <label>Upload raw data file {{ form.attachment }}</label>
+    <label>File description {{ form.attachment_description }}</label>
+    <label>Notes {{ form.notes }}</label>
   </div>
 
-  <label>File description
-    {{ form.attachment_description }}
-  </label>
+  {% for table in tables %}
+    <section class="table-section" data-table-id="{{ table.id }}">
+      <div class="section-heading">
+        <div>
+          <h2>{{ table.name }}</h2>
+          {% if table.description %}<p>{{ table.description }}</p>{% endif %}
+          <p class="formula-help">Use as <code>{{ table.variable_name }}.field_name</code> in final-result formulas.</p>
+        </div>
+        <button type="button" class="btn secondary add-row" data-table-id="{{ table.id }}">+ Add row</button>
+      </div>
 
-  <label>Notes
-    {{ form.notes }}
-  </label>
-
-  <div class="table-toolbar">
-    <div>
-      <h2>Observation table</h2>
-      <p class="muted small">Each row is one repeated measurement for this submission.</p>
-    </div>
-    <button type="button" class="button secondary" onclick="addObservationRow()">+ Add row</button>
-  </div>
-
-  <div class="responsive-table">
-    <table class="data-entry-table" id="observation-table">
-      <thead>
-        <tr>
-          <th style="width:110px;">Serial No.</th>
-          {% for field in fields %}
-            <th>{{ field.name }}{% if field.unit %} <span class="unit">({{ field.unit }})</span>{% endif %}{% if field.is_derived %}<span class="badge derived">calculated</span>{% endif %}</th>
-          {% endfor %}
-          <th style="width:80px;">Action</th>
-        </tr>
-      </thead>
-      <tbody id="observation-body">
-        {% for i in default_rows %}
-          <tr>
-            <td><input type="number" min="1" name="row_{{ i }}_serial" value="{{ i }}"></td>
-            {% for field in fields %}
-              <td>
-                {% if field.is_derived %}
-                  <input type="text" value="Calculated on submit" disabled class="calculated-input">
-                  {% if field.calculation_formula %}<p class="field-help formula">{{ field.variable_name }} = {{ field.calculation_formula }}</p>{% endif %}
-                {% elif field.field_type == 'textarea' %}
-                  <textarea name="row_{{ i }}_field_{{ field.id }}" rows="2" {% if field.required %}required{% endif %}></textarea>
-                {% elif field.field_type == 'integer' %}
-                  <input type="number" step="1" name="row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}>
-                {% elif field.field_type == 'decimal' %}
-                  <input type="text" inputmode="decimal" name="row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %} placeholder="Enter value">
-                {% elif field.field_type == 'date' %}
-                  <input type="date" name="row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}>
-                {% elif field.field_type == 'boolean' %}
-                  <select name="row_{{ i }}_field_{{ field.id }}">
-                    <option value="">—</option>
-                    <option value="true">True</option>
-                    <option value="false">False</option>
-                  </select>
-                {% else %}
-                  <input type="text" name="row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}>
-                {% endif %}
-                {% if field.help_text %}<p class="field-help">{{ field.help_text }}</p>{% endif %}
-              </td>
+      <div class="responsive-table">
+        <table class="data-entry-table" id="table-{{ table.id }}">
+          <thead>
+            <tr>
+              <th>Serial No.</th>
+              {% for field in table.fields.all %}
+                <th>
+                  {{ field.name }}{% if field.unit %} ({{ field.unit }}){% endif %}
+                  {% if field.is_derived %}<span class="pill">calculated</span>{% endif %}
+                  {% if field.calculation_formula %}
+                    <small><code>{{ field.variable_name }} = {{ field.calculation_formula }}</code></small>
+                  {% endif %}
+                </th>
+              {% endfor %}
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in default_rows %}
+              <tr data-row-index="{{ i }}">
+                <td><input type="number" min="1" name="table_{{ table.id }}_row_{{ i }}_serial" value="{{ i }}"></td>
+                {% for field in table.fields.all %}
+                  <td>
+                    {% if field.is_derived %}
+                      <input type="text" disabled placeholder="Calculated after submit">
+                    {% elif field.field_type == 'textarea' %}
+                      <textarea name="table_{{ table.id }}_row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}></textarea>
+                    {% elif field.field_type == 'integer' %}
+                      <input type="text" inputmode="numeric" name="table_{{ table.id }}_row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}>
+                    {% elif field.field_type == 'decimal' %}
+                      <input type="text" inputmode="decimal" name="table_{{ table.id }}_row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}>
+                    {% elif field.field_type == 'date' %}
+                      <input type="date" name="table_{{ table.id }}_row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}>
+                    {% elif field.field_type == 'boolean' %}
+                      <select name="table_{{ table.id }}_row_{{ i }}_field_{{ field.id }}">
+                        <option value="">—</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                      </select>
+                    {% else %}
+                      <input type="text" name="table_{{ table.id }}_row_{{ i }}_field_{{ field.id }}" {% if field.required %}required{% endif %}>
+                    {% endif %}
+                    {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                  </td>
+                {% endfor %}
+                <td><button type="button" class="btn danger remove-row">Remove</button></td>
+              </tr>
             {% endfor %}
-            <td><button type="button" class="link-button danger" onclick="removeObservationRow(this)">Remove</button></td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% empty %}
+    <div class="alert alert-error">No tables are defined for this experiment. Add Experiment tables and fields from Django admin.</div>
+  {% endfor %}
 
-  <div class="actions">
-    <button type="submit" class="button">Submit data</button>
-    <a href="{% url 'experiment_detail' experiment.slug %}" class="button secondary">Cancel</a>
+  {% if experiment.result_fields.all %}
+    <section class="result-preview">
+      <h2>Final results to be calculated</h2>
+      <div class="result-grid">
+        {% for result in experiment.result_fields.all %}
+          <div class="result-card">
+            <strong>{{ result.name }}{% if result.unit %} ({{ result.unit }}){% endif %}</strong>
+            <code>{{ result.variable_name }} = {{ result.calculation_formula }}</code>
+            {% if result.help_text %}<small>{{ result.help_text }}</small>{% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <div class="form-actions">
+    <button type="submit" class="btn primary">Submit data</button>
+    <a href="{% url 'experiment_detail' experiment.slug %}" class="btn secondary">Cancel</a>
   </div>
 </form>
 
 <script>
-let rowCounter = 5;
-const fieldMeta = [
-  {% for field in fields %}
-  {id: {{ field.id }}, type: "{{ field.field_type }}", required: {{ field.required|yesno:'true,false' }}, help: "{{ field.help_text|escapejs }}", formula: "{{ field.calculation_formula|escapejs }}", variable: "{{ field.variable_name|escapejs }}"}{% if not forloop.last %},{% endif %}
-  {% endfor %}
-];
-
-function inputForField(rowIndex, field) {
-  const required = field.required ? 'required' : '';
-  let html = '';
-  if (field.type === 'derived') {
-    html = `<input type="text" value="Calculated on submit" disabled class="calculated-input">`;
-    if (field.formula) html += `<p class="field-help formula">${field.variable} = ${field.formula}</p>`;
-  } else if (field.type === 'textarea') {
-    html = `<textarea name="row_${rowIndex}_field_${field.id}" rows="2" ${required}></textarea>`;
-  } else if (field.type === 'integer') {
-    html = `<input type="number" step="1" name="row_${rowIndex}_field_${field.id}" ${required}>`;
-  } else if (field.type === 'decimal') {
-    html = `<input type="text" inputmode="decimal" name="row_${rowIndex}_field_${field.id}" ${required} placeholder="Enter value">`;
-  } else if (field.type === 'date') {
-    html = `<input type="date" name="row_${rowIndex}_field_${field.id}" ${required}>`;
-  } else if (field.type === 'boolean') {
-    html = `<select name="row_${rowIndex}_field_${field.id}"><option value="">—</option><option value="true">True</option><option value="false">False</option></select>`;
-  } else {
-    html = `<input type="text" name="row_${rowIndex}_field_${field.id}" ${required}>`;
+function buildCell(tableId, rowIndex, field) {
+  if (field.is_derived) {
+    return '<input type="text" disabled placeholder="Calculated after submit">';
   }
-  if (field.help) html += `<p class="field-help">${field.help}</p>`;
-  return html;
+  const required = field.required ? 'required' : '';
+  const name = `table_${tableId}_row_${rowIndex}_field_${field.id}`;
+  if (field.field_type === 'textarea') return `<textarea name="${name}" ${required}></textarea>`;
+  if (field.field_type === 'integer') return `<input type="text" inputmode="numeric" name="${name}" ${required}>`;
+  if (field.field_type === 'decimal') return `<input type="text" inputmode="decimal" name="${name}" ${required}>`;
+  if (field.field_type === 'date') return `<input type="date" name="${name}" ${required}>`;
+  if (field.field_type === 'boolean') {
+    return `<select name="${name}"><option value="">—</option><option value="true">True</option><option value="false">False</option></select>`;
+  }
+  return `<input type="text" name="${name}" ${required}>`;
 }
 
-function addObservationRow() {
-  rowCounter += 1;
-  const tbody = document.getElementById('observation-body');
-  const tr = document.createElement('tr');
-  let cells = `<td><input type="number" min="1" name="row_${rowCounter}_serial" value="${rowCounter}"></td>`;
-  fieldMeta.forEach(field => {
-    cells += `<td>${inputForField(rowCounter, field)}</td>`;
+const tableFields = {
+  {% for table in tables %}
+    "{{ table.id }}": [
+      {% for field in table.fields.all %}
+        {id: {{ field.id }}, field_type: "{{ field.field_type }}", required: {% if field.required %}true{% else %}false{% endif %}, is_derived: {% if field.is_derived %}true{% else %}false{% endif %}},
+      {% endfor %}
+    ],
+  {% endfor %}
+};
+
+document.querySelectorAll('.add-row').forEach(button => {
+  button.addEventListener('click', () => {
+    const tableId = button.dataset.tableId;
+    const tbody = document.querySelector(`#table-${tableId} tbody`);
+    const rowIndex = tbody.querySelectorAll('tr').length + 1;
+    const tr = document.createElement('tr');
+    tr.dataset.rowIndex = rowIndex;
+    let html = `<td><input type="number" min="1" name="table_${tableId}_row_${rowIndex}_serial" value="${rowIndex}"></td>`;
+    tableFields[tableId].forEach(field => {
+      html += `<td>${buildCell(tableId, rowIndex, field)}</td>`;
+    });
+    html += '<td><button type="button" class="btn danger remove-row">Remove</button></td>';
+    tr.innerHTML = html;
+    tbody.appendChild(tr);
   });
-  cells += `<td><button type="button" class="link-button danger" onclick="removeObservationRow(this)">Remove</button></td>`;
-  tr.innerHTML = cells;
-  tbody.appendChild(tr);
-}
+});
 
-function removeObservationRow(button) {
-  const row = button.closest('tr');
-  row.remove();
-}
+document.addEventListener('click', event => {
+  if (event.target.classList.contains('remove-row')) {
+    const tbody = event.target.closest('tbody');
+    if (tbody.querySelectorAll('tr').length > 1) {
+      event.target.closest('tr').remove();
+    }
+  }
+});
 </script>
 {% endblock %}

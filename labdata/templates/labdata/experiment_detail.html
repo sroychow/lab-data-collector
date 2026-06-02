@@ -1,23 +1,85 @@
 {% extends 'base.html' %}
 {% block title %}{{ experiment.title }} | LabVault{% endblock %}
 {% block content %}
-<div class="page-head">
-  <div><p class="eyebrow">{{ experiment.course_or_project|default:'Lab experiment' }}</p><h1>{{ experiment.title }}</h1><p>{{ experiment.objective }}</p></div>
-  <div class="actions"><a class="primary" href="{% url 'submit_data' experiment.slug %}">Submit data</a><a class="secondary" href="{% url 'export_csv' experiment.slug %}">Export CSV</a></div>
-</div>
-<section class="panel">
-  <h2>Data fields</h2>
-  <div class="field-list">
-    {% for field in experiment.fields.all %}
-      <div><strong>{{ field.name }}</strong><span>{{ field.get_field_type_display }}{% if field.unit %} · {{ field.unit }}{% endif %}</span></div>
-    {% empty %}<p>No fields defined yet. Add fields from Django admin.</p>{% endfor %}
+<section class="page-header">
+  <p class="eyebrow">{{ experiment.course_or_project|default:'Lab experiment' }}</p>
+  <h1>{{ experiment.title }}</h1>
+  <p>{{ experiment.objective }}</p>
+  <div class="actions">
+    <a class="btn primary" href="{% url 'submit_data' experiment.slug %}">Submit data</a>
+    <a class="btn secondary" href="{% url 'export_csv' experiment.slug %}">Export CSV</a>
   </div>
 </section>
-<section class="panel">
-  <div class="panel-head"><h2>Submissions</h2><span>{{ experiment.submissions.count }} total</span></div>
-  <div class="table-wrap"><table><thead><tr><th>Time</th><th>Sample</th><th>User</th><th>Status</th><th></th></tr></thead><tbody>
-    {% for sub in submissions %}<tr><td>{{ sub.created_at|date:'d M Y, H:i' }}</td><td>{{ sub.sample_id|default:'—' }}</td><td>{{ sub.submitted_by|default:'—' }}</td><td><span class="pill">{{ sub.get_status_display }}</span></td><td><a href="{% url 'submission_detail' sub.id %}">Open</a></td></tr>
-    {% empty %}<tr><td colspan="5">No data submitted yet.</td></tr>{% endfor %}
-  </tbody></table></div>
+<section class="card">
+    <h2>Plots</h2>
+    <div class="plot-list">
+        {% for plot in plot_configs %}
+            <a class="btn btn-secondary" href="{% url 'plot_detail' plot.id %}">
+                {{ plot.title }}
+            </a>
+        {% empty %}
+            <p>No plots have been configured for this experiment.</p>
+        {% endfor %}
+    </div>
+</section>
+<section class="card">
+  <h2>Data tables</h2>
+  {% for table in experiment.tables.all %}
+    <div class="table-summary">
+      <h3>{{ table.name }} <code>{{ table.variable_name }}</code></h3>
+      {% if table.description %}<p>{{ table.description }}</p>{% endif %}
+      <ul class="field-list">
+        {% for field in table.fields.all %}
+          <li>
+            <strong>{{ field.name }}</strong>
+            <span>{{ field.get_field_type_display }}{% if field.unit %} · {{ field.unit }}{% endif %}</span>
+            {% if field.is_derived %}<code>{{ field.variable_name }} = {{ field.calculation_formula }}</code>{% else %}<code>{{ field.variable_name }}</code>{% endif %}
+          </li>
+        {% empty %}
+          <li>No fields defined for this table.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% empty %}
+    <p>No tables defined yet. Add Experiment tables from Django admin.</p>
+  {% endfor %}
+</section>
+
+{% if experiment.result_fields.all %}
+<section class="card">
+  <h2>Final result fields</h2>
+  <ul class="field-list">
+    {% for result in experiment.result_fields.all %}
+      <li>
+        <strong>{{ result.name }}</strong>
+        <span>{% if result.unit %}{{ result.unit }}{% endif %}</span>
+        <code>{{ result.variable_name }} = {{ result.calculation_formula }}</code>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="card">
+  <h2>Submissions</h2>
+  <p>{{ experiment.submissions.count }} total</p>
+  <div class="responsive-table">
+    <table>
+      <thead><tr><th>Time</th><th>Sample</th><th>User</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for sub in submissions %}
+          <tr>
+            <td>{{ sub.created_at|date:'d M Y, H:i' }}</td>
+            <td>{{ sub.sample_id|default:'—' }}</td>
+            <td>{{ sub.submitted_by|default:'—' }}</td>
+            <td>{{ sub.get_status_display }}</td>
+            <td><a href="{% url 'submission_detail' sub.pk %}">Open</a></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5">No data submitted yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </section>
 {% endblock %}

@@ -1,61 +1,92 @@
 {% extends 'base.html' %}
+{% load labdata_extras %}
 {% block content %}
-<section class="page-head">
-  <div>
-    <p class="eyebrow">Submission</p>
-    <h1>{{ submission.experiment.title }}</h1>
-    <p class="muted">Submitted by {{ submission.submitted_by }} on {{ submission.created_at }}</p>
-  </div>
+<section class="page-header">
+  <p class="eyebrow">Submission</p>
+  <h1>{{ submission.experiment.title }}</h1>
+  <p>Submitted by {{ submission.submitted_by }} on {{ submission.created_at }}</p>
 </section>
 
-<section class="card">
-  <div class="grid two">
-    <p><strong>Sample / Run ID:</strong> {{ submission.sample_id|default:'—' }}</p>
-    <p><strong>Status:</strong> {{ submission.status }}</p>
-  </div>
+<div class="card meta-card">
+  <p><strong>Sample / Run ID:</strong> {{ submission.sample_id|default:'—' }}</p>
+  <p><strong>Status:</strong> {{ submission.status }}</p>
   {% if submission.notes %}<p><strong>Notes:</strong> {{ submission.notes }}</p>{% endif %}
-</section>
+</div>
 
-<section class="card">
-  <h2>Observation rows</h2>
-  <div class="responsive-table">
-    <table>
-      <thead>
-        <tr>
-          <th>Serial No.</th>
-          {% for field in submission.experiment.fields.all %}
-            <th>{{ field.name }}{% if field.unit %} <span class="unit">({{ field.unit }})</span>{% endif %}{% if field.is_derived %}<span class="badge derived">calculated</span>{% endif %}</th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in submission.rows.all %}
+{% for table in submission.experiment.tables.all %}
+  <section class="card table-section">
+    <h2>{{ table.name }}</h2>
+    <div class="responsive-table">
+      <table>
+        <thead>
           <tr>
-            <td>{{ row.serial_number }}</td>
-            {% for field in submission.experiment.fields.all %}
-              <td>
-                {% for value in row.values.all %}
-                  {% if value.field_id == field.id %}{{ value.value }}{% endif %}
-                {% endfor %}
-              </td>
+            <th>Serial No.</th>
+            {% for field in table.fields.all %}
+              <th>{{ field.name }}{% if field.unit %} ({{ field.unit }}){% endif %}{% if field.is_derived %}<span class="pill">calculated</span>{% endif %}</th>
             {% endfor %}
           </tr>
-        {% empty %}
-          <tr><td colspan="99">No observation rows found.</td></tr>
+        </thead>
+        <tbody>
+          {% for row in submission.rows.all %}
+            {% if row.table_id == table.id %}
+              <tr>
+                <td>{{ row.serial_number }}</td>
+                {% for field in table.fields.all %}
+                  <td>{{ row|field_value:field }}</td>
+                {% endfor %}
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endfor %}
+{% if plot_configs %}
+<section class="card">
+    <h2>Plots for this lab entry</h2>
+    <p class="muted">
+        These plots are defined once by the admin, but generated using only this submitted entry.
+    </p>
+
+    <div class="plot-list">
+        {% for plot in plot_configs %}
+            <a class="btn btn-secondary"
+               href="{% url 'submission_plot_detail' submission.id plot.id %}">
+                {{ plot.title }}
+            </a>
         {% endfor %}
-      </tbody>
-    </table>
-  </div>
+    </div>
 </section>
+{% endif %}
+{% if submission.result_values.all %}
+  <section class="card table-section">
+    <h2>Final results</h2>
+    <div class="responsive-table">
+      <table>
+        <thead><tr><th>Quantity</th><th>Formula</th><th>Value</th></tr></thead>
+        <tbody>
+          {% for result in submission.result_values.all %}
+            <tr>
+              <td>{{ result.result_field.name }}{% if result.result_field.unit %} ({{ result.result_field.unit }}){% endif %}</td>
+              <td><code>{{ result.result_field.calculation_formula }}</code></td>
+              <td>{{ result.value }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endif %}
 
 {% if submission.attachments.all %}
-<section class="card">
-  <h2>Attachments</h2>
-  <ul>
-    {% for attachment in submission.attachments.all %}
-      <li><a href="{{ attachment.file.url }}">{{ attachment.file.name }}</a> — {{ attachment.description }}</li>
-    {% endfor %}
-  </ul>
-</section>
+  <section class="card">
+    <h2>Attachments</h2>
+    <ul>
+      {% for attachment in submission.attachments.all %}
+        <li><a href="{{ attachment.file.url }}">{{ attachment.file.name }}</a> — {{ attachment.description }}</li>
+      {% endfor %}
+    </ul>
+  </section>
 {% endif %}
 {% endblock %}
