@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LabVault Experiments</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a class="brand" href="index.html">LabVault</a>
+            <div class="actions">
+                <span id="userBox" class="muted"></span>
+                <button id="logoutButton" class="btn-secondary">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h1>Active experiments</h1>
+            <p class="muted">Loaded from the Django API backend.</p>
+            <p id="errorBox" class="error"></p>
+        </section>
+
+        <section id="experimentList" class="grid"></section>
+    </main>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/experiments.js"></script>
+</body>
+</html>
