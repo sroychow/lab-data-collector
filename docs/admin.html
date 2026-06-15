@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel | LabVault</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a class="brand" href="index.html">LabVault</a>
+            <div class="actions">
+                <a class="btn btn-secondary" href="index.html">Experiments</a>
+                <a class="btn btn-secondary" href="submission.html">Submissions</a>
+                <button id="logoutButton" class="btn-secondary">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h1>Django Admin Panel</h1>
+            <p class="muted">
+                The full admin panel is served by the Django backend. It opens in a new tab.
+            </p>
+
+            <p id="adminMessage"></p>
+
+            <div class="actions">
+                <a id="adminButton" class="btn" data-admin-link href="#">Open Django Admin</a>
+                <a class="btn btn-secondary" href="index.html">Back to frontend</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Use admin for</h2>
+            <p>
+                Experiments, tables, fields, derived formulas, result fields, plot configurations,
+                user accounts, and staff-level data correction.
+            </p>
+        </section>
+    </main>
+
+    <script src="assets/js/config.js"></script>
+    <script>
+        const adminUrl = `${ADMIN_BASE_URL}/admin/`;
+
+        const link = document.getElementById("adminLink");
+        link.href = adminUrl;
+
+        window.location.href = adminUrl;
+    </script>
+
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/nav.js"></script>
+    <script>
+        requireLogin();
+
+        document.getElementById("logoutButton").addEventListener("click", logout);
+
+        const user = getUser();
+        const message = document.getElementById("adminMessage");
+        const button = document.getElementById("adminButton");
+
+        if (!userIsAdmin()) {
+            message.textContent = "Your API account is not staff/superuser. The backend admin may deny access.";
+            button.classList.add("btn-secondary");
+        } else {
+            message.textContent = `Logged in as ${user.username}. Your account has staff/admin privileges.`;
+        }
+    </script>
+</body>
+</html>

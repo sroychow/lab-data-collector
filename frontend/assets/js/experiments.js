@@ -42,15 +42,32 @@ async function loadExperiments() {
             const objective = document.createElement("p");
             objective.textContent = experiment.objective || "No objective added.";
 
-            const link = document.createElement("a");
-            link.className = "btn";
-            link.href = `experiment.html?slug=${encodeURIComponent(experiment.slug)}`;
-            link.textContent = "Open experiment";
+            const actions = document.createElement("div");
+            actions.className = "actions";
+
+            const openLink = document.createElement("a");
+            openLink.className = "btn";
+            openLink.href = `experiment.html?slug=${encodeURIComponent(experiment.slug)}`;
+            openLink.textContent = "Open experiment";
+
+            const submitLink = document.createElement("a");
+            submitLink.className = "btn btn-secondary";
+            submitLink.href = `submit.html?slug=${encodeURIComponent(experiment.slug)}`;
+            submitLink.textContent = "Submit data";
+
+            const submissionsLink = document.createElement("a");
+            submissionsLink.className = "btn btn-secondary";
+            submissionsLink.href = `submission.html?experiment=${encodeURIComponent(experiment.slug)}`;
+            submissionsLink.textContent = "View submissions";
+
+            actions.appendChild(openLink);
+            actions.appendChild(submitLink);
+            actions.appendChild(submissionsLink);
 
             card.appendChild(title);
             card.appendChild(meta);
             card.appendChild(objective);
-            card.appendChild(link);
+            card.appendChild(actions);
 
             list.appendChild(card);
         });

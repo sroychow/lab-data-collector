@@ -10,11 +10,26 @@ const tablesBox = document.getElementById("tablesBox");
 const resultsBox = document.getElementById("resultsBox");
 const plotsBox = document.getElementById("plotsBox");
 const errorBox = document.getElementById("errorBox");
+const submitLink = document.getElementById("submitLink");
+const submissionLink = document.getElementById("submissionLink");
+const experimentSubmissionsBox = document.getElementById("experimentSubmissionsBox");
 
 document.getElementById("logoutButton").addEventListener("click", logout);
 
 if (!slug) {
     errorBox.textContent = "No experiment slug provided.";
+} else {
+    submitLink.href = `submit.html?slug=${encodeURIComponent(slug)}`;
+    submissionLink.href = `submission.html?experiment=${encodeURIComponent(slug)}`;
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }
 
 function fieldRow(field) {
@@ -33,13 +48,51 @@ function fieldRow(field) {
     `;
 }
 
-function escapeHtml(value) {
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+async function loadExperimentSubmissions() {
+    if (!slug) return;
+
+    try {
+        const submissions = await apiFetch(`/submissions/?experiment=${encodeURIComponent(slug)}`);
+
+        if (!submissions.length) {
+            experimentSubmissionsBox.innerHTML = "<p>No submitted entries yet.</p>";
+            return;
+        }
+
+        experimentSubmissionsBox.innerHTML = `
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Entry</th>
+                            <th>Sample / Run ID</th>
+                            <th>Submitted by</th>
+                            <th>Created</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${submissions.map((submission) => `
+                            <tr>
+                                <td>#${submission.id}</td>
+                                <td>${escapeHtml(submission.sample_id || "—")}</td>
+                                <td>${escapeHtml(submission.submitted_by_username || "—")}</td>
+                                <td>${new Date(submission.created_at).toLocaleString()}</td>
+                                <td>
+                                    <a class="btn btn-secondary"
+                                       href="submission.html?id=${encodeURIComponent(submission.id)}">
+                                       Open data
+                                    </a>
+                                </td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    } catch (error) {
+        experimentSubmissionsBox.innerHTML = `<p class="error">${escapeHtml(error.message)}</p>`;
+    }
 }
 
 async function loadSchema() {
@@ -60,9 +113,7 @@ async function loadSchema() {
             tablesBox.innerHTML = schema.tables.map((table) => `
                 <section class="card">
                     <h2>${escapeHtml(table.name)}</h2>
-                    <p class="muted">
-                        Variable name: <code>${escapeHtml(table.variable_name)}</code>
-                    </p>
+                    <p class="muted">Variable name: <code>${escapeHtml(table.variable_name)}</code></p>
                     ${table.description ? `<p>${escapeHtml(table.description)}</p>` : ""}
                     <div class="table-wrap">
                         <table>
@@ -94,12 +145,7 @@ async function loadSchema() {
                     <div class="table-wrap">
                         <table>
                             <thead>
-                                <tr>
-                                    <th>Result</th>
-                                    <th>Variable</th>
-                                    <th>Formula</th>
-                                    <th>Unit</th>
-                                </tr>
+                                <tr><th>Result</th><th>Variable</th><th>Formula</th><th>Unit</th></tr>
                             </thead>
                             <tbody>
                                 ${schema.result_fields.map((result) => `
@@ -126,14 +172,7 @@ async function loadSchema() {
                     <div class="table-wrap">
                         <table>
                             <thead>
-                                <tr>
-                                    <th>Plot</th>
-                                    <th>Table</th>
-                                    <th>X field</th>
-                                    <th>Y field</th>
-                                    <th>Chart</th>
-                                    <th>Fit</th>
-                                </tr>
+                                <tr><th>Plot</th><th>Table</th><th>X field</th><th>Y field</th><th>Chart</th><th>Fit</th></tr>
                             </thead>
                             <tbody>
                                 ${schema.plot_configs.map((plot) => `
@@ -152,10 +191,10 @@ async function loadSchema() {
                 </section>
             `;
         }
-
     } catch (error) {
         errorBox.textContent = error.message;
     }
 }
 
 loadSchema();
+loadExperimentSubmissions();

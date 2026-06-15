@@ -6,3 +6,5 @@ media/
 staticfiles/
 backups/
 .venv/
+frontend/assets/js/config.js
+docs/assets/js/config.js

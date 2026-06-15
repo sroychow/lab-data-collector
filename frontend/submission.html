@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LabVault Experiments</title>
+    <title>Submission | LabVault</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -10,11 +10,7 @@
         <div class="header-inner">
             <a class="brand" href="index.html">LabVault</a>
             <div class="actions">
-                <a class="btn btn-secondary" href="submission.html">Submissions</a>
-                <a class="btn btn-secondary" href="admin.html">
-                   Admin Panel
-                </a>
-                <span id="userBox" class="muted"></span>
+                <a class="btn btn-secondary" href="index.html">Experiments</a>
                 <button id="logoutButton" class="btn-secondary">Logout</button>
             </div>
         </div>
@@ -22,17 +18,16 @@
 
     <main class="container">
         <section class="card">
-            <h1>Active experiments</h1>
-            <p class="muted">Choose an experiment to view the schema, submit observations, or inspect submitted data.</p>
+            <h1 id="pageTitle">Submissions</h1>
+            <p id="metaBox" class="muted"></p>
             <p id="errorBox" class="error"></p>
         </section>
 
-        <section id="experimentList" class="grid"></section>
+        <div id="contentBox"></div>
     </main>
 
     <script src="assets/js/config.js"></script>
     <script src="assets/js/api.js"></script>
-    <script src="assets/js/nav.js"></script>
-    <script src="assets/js/experiments.js"></script>
+    <script src="assets/js/submission.js"></script>
 </body>
 </html>

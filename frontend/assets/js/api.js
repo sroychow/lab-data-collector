@@ -26,6 +26,11 @@ function getUser() {
     }
 }
 
+function userIsAdmin() {
+    const user = getUser();
+    return Boolean(user && (user.is_staff || user.is_superuser));
+}
+
 function requireLogin() {
     if (!getToken()) {
         window.location.href = "login.html";
