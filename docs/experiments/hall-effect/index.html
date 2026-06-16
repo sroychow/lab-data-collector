@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hall Effect | LabVault Snapshot</title>
+  <link rel="stylesheet" href="/lab-data-collector/assets/css/styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="/lab-data-collector/">LabVault Snapshot</a>
+      <nav class="actions">
+        <a class="btn btn-secondary" href="/lab-data-collector/">Experiments</a>
+        <a class="btn btn-secondary" href="/lab-data-collector/submissions/">Submissions</a>
+        <a class="btn btn-secondary" href="/lab-data-collector/data/experiments.json">JSON</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <section class="notice">
+      Read-only public snapshot generated on 16 Jun 2026, 11:13 AM.
+      Live updates are maintained on the local Django server.
+    </section>
+    
+    <section class="card hero">
+      <h1>Hall Effect</h1>
+      <p class="muted">No course/project · Protocol v1 · active</p>
+      <p>To study the Hall Effect and hence determine the Hall coefficient (𝑹𝑯) and carrier density(𝒏) of a given semiconductor.</p>
+    </section>
+    
+        <section class="card">
+          <h2>Submitted entries</h2>
+          <p>No submitted entries in this snapshot.</p>
+        </section>
+    
+        <section class="card">
+          <h2>Table 1</h2>
+          <p class="muted">Variable name: <code>Vh1</code></p>
+          <p>Hall voltage when current is varied and magnetic field is fixed.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Field</th><th>Variable</th><th>Type</th><th>Unit</th><th>Required</th><th>Formula</th></tr></thead>
+              <tbody>
+            <tr>
+              <td>Current</td>
+              <td><code>Ivar</code></td>
+              <td>decimal</td>
+              <td>—</td>
+              <td>Yes</td>
+              <td><code>—</code></td>
+            </tr>
+            <tr>
+              <td>Hall Voltage (Hz=500)</td>
+              <td><code>vh1</code></td>
+              <td>decimal</td>
+              <td>—</td>
+              <td>Yes</td>
+              <td><code>—</code></td>
+            </tr>
+            <tr>
+              <td>Hall Voltage (Hz=1000)</td>
+              <td><code>vh2</code></td>
+              <td>decimal</td>
+              <td>—</td>
+              <td>Yes</td>
+              <td><code>—</code></td>
+            </tr></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="card">
+          <h2>Table 2</h2>
+          <p class="muted">Variable name: <code>Vh2</code></p>
+          <p>Hall voltage when magnetic field is varied and current is fixed.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Field</th><th>Variable</th><th>Type</th><th>Unit</th><th>Required</th><th>Formula</th></tr></thead>
+              <tbody>
+            <tr>
+              <td>Magnetic Field (Hz) Gauss</td>
+              <td><code>hz2</code></td>
+              <td>decimal</td>
+              <td>—</td>
+              <td>Yes</td>
+              <td><code>—</code></td>
+            </tr>
+            <tr>
+              <td>Hall Voltage (I=5mA)</td>
+              <td><code>vh3</code></td>
+              <td>decimal</td>
+              <td>—</td>
+              <td>Yes</td>
+              <td><code>—</code></td>
+            </tr>
+            <tr>
+              <td>Hall Voltage (I=10mA)</td>
+              <td><code>vh4</code></td>
+              <td>decimal</td>
+              <td>—</td>
+              <td>Yes</td>
+              <td><code>—</code></td>
+            </tr></tbody>
+            </table>
+          </div>
+        </section>
+    
+    
+  </main>
+  <script src="/lab-data-collector/assets/js/site.js"></script>
+</body>
+</html>

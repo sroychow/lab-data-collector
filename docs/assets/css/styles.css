@@ -1,158 +1,23 @@
-:root {
-    --bg: #f6f7fb;
-    --card: #ffffff;
-    --text: #172033;
-    --muted: #667085;
-    --border: #d9dee8;
-    --primary: #1f5eff;
-    --primary-dark: #1748c8;
-    --danger: #b42318;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-}
-
-.header {
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    padding: 1rem 1.5rem;
-}
-
-.header-inner {
-    max-width: 1050px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.brand {
-    font-weight: 750;
-    font-size: 1.25rem;
-    text-decoration: none;
-    color: var(--text);
-}
-
-.container {
-    max-width: 1050px;
-    margin: 0 auto;
-    padding: 1.5rem;
-}
-
-.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
-}
-
-.login-card {
-    max-width: 420px;
-    margin: 4rem auto;
-}
-
-h1, h2, h3 {
-    margin-top: 0;
-}
-
-.muted {
-    color: var(--muted);
-}
-
-.error {
-    color: var(--danger);
-    font-weight: 600;
-}
-
-label {
-    display: block;
-    font-weight: 650;
-    margin: 0.8rem 0 0.35rem;
-}
-
-input {
-    width: 100%;
-    padding: 0.75rem 0.85rem;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font: inherit;
-}
-
-.btn,
-button {
-    display: inline-block;
-    border: none;
-    border-radius: 10px;
-    padding: 0.7rem 1rem;
-    background: var(--primary);
-    color: white;
-    text-decoration: none;
-    font-weight: 700;
-    cursor: pointer;
-    font: inherit;
-}
-
-.btn:hover,
-button:hover {
-    background: var(--primary-dark);
-}
-
-.btn-secondary {
-    background: #eef2ff;
-    color: var(--primary);
-}
-
-.btn-secondary:hover {
-    background: #dbe4ff;
-}
-
-.actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
-}
-
-.table-wrap {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95rem;
-}
-
-th, td {
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-    padding: 0.7rem;
-    vertical-align: top;
-}
-
-th {
-    background: #f8fafc;
-}
-
-code {
-    background: #f1f5f9;
-    padding: 0.12rem 0.32rem;
-    border-radius: 6px;
-}
+:root{--bg:#f6f7fb;--card:#fff;--text:#172033;--muted:#667085;--border:#d9dee8;--primary:#1f5eff;--primary-dark:#1748c8}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:1rem 1.5rem}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;gap:1rem;align-items:center;justify-content:space-between}
+.brand{color:var(--text);text-decoration:none;font-weight:800;font-size:1.25rem}
+.container{max-width:1100px;margin:0 auto;padding:1.5rem}
+.notice{background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;border-radius:14px;padding:.9rem 1rem;margin-bottom:1rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.25rem;margin-bottom:1rem;box-shadow:0 10px 25px rgba(15,23,42,.04)}
+.hero{background:linear-gradient(135deg,#fff,#eef2ff)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1rem}
+.actions{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.btn{display:inline-block;border:0;border-radius:10px;padding:.7rem 1rem;background:var(--primary);color:#fff;text-decoration:none;font-weight:700}
+.btn:hover{background:var(--primary-dark)}
+.btn-secondary{background:#eef2ff;color:var(--primary)}
+.btn-secondary:hover{background:#dbe4ff}
+.muted{color:var(--muted)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th,td{padding:.75rem;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:#f8fafc}
+code{background:#f1f5f9;padding:.12rem .32rem;border-radius:6px}
+@media print{.header,.notice{display:none}body{background:#fff}.card{box-shadow:none;border:1px solid #ccc}}

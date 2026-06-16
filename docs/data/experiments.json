@@ -1,0 +1,22 @@
+[
+  {
+    "id": 2,
+    "title": "Hall Effect",
+    "slug": "hall-effect",
+    "course_or_project": "",
+    "objective": "To study the Hall Effect and hence determine the Hall coefficient (𝑹𝑯) and carrier density(𝒏) of a given semiconductor.",
+    "protocol_version": "v1",
+    "status": "active",
+    "submission_count": 0
+  },
+  {
+    "id": 1,
+    "title": "Sonometer",
+    "slug": "sonometer",
+    "course_or_project": "",
+    "objective": "",
+    "protocol_version": "v1",
+    "status": "active",
+    "submission_count": 5
+  }
+]

@@ -1,0 +1,948 @@
+[
+  {
+    "id": 5,
+    "experiment": "Sonometer",
+    "experiment_slug": "sonometer",
+    "sample_id": "",
+    "notes": "",
+    "status": "submitted",
+    "submitted_by": "sroychow",
+    "created_at": "2026-06-02T12:29:43.743016+00:00",
+    "updated_at": "2026-06-02T12:29:43.743026+00:00",
+    "rows": [
+      {
+        "table": "Main observations",
+        "serial_number": 1,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "0"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "19.5"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "21"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "20.25"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "0"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "0"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 2,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "250"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "31"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "28"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "29.5"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "16.77880498"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "83.8940249"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "494.9747468"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 3,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "500"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "38"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "34"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "36"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "19.44444444"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "97.2222222"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "700"
+          }
+        ]
+      }
+    ],
+    "results": []
+  },
+  {
+    "id": 4,
+    "experiment": "Sonometer",
+    "experiment_slug": "sonometer",
+    "sample_id": "4",
+    "notes": "",
+    "status": "submitted",
+    "submitted_by": "sroychow",
+    "created_at": "2026-06-02T11:13:53.627057+00:00",
+    "updated_at": "2026-06-02T11:13:53.627066+00:00",
+    "rows": [
+      {
+        "table": "Main observations",
+        "serial_number": 1,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "0"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "19.5"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "20"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "19.75"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "0"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "0"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 2,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "250"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "31"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "28"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "29.5"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "16.77880498"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "83.8940249"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "494.9747468"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 3,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "500"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "38"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "34"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "36"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "19.44444444"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "97.2222222"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "700"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 4,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "750"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "45.3"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "41"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "43.15"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "19.86839884"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "99.3419942"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "857.32141"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 5,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "1000"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "53"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "49"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "51"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "19.41077439"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "97.05387195"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "989.9494937"
+          }
+        ]
+      }
+    ],
+    "results": []
+  },
+  {
+    "id": 3,
+    "experiment": "Sonometer",
+    "experiment_slug": "sonometer",
+    "sample_id": "3",
+    "notes": "",
+    "status": "submitted",
+    "submitted_by": "sroychow",
+    "created_at": "2026-06-02T11:09:18.982968+00:00",
+    "updated_at": "2026-06-02T11:09:18.982978+00:00",
+    "rows": [
+      {
+        "table": "Main observations",
+        "serial_number": 1,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "0"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "16.2"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "14.7"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "15.45"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "0"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "0"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 2,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "250"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "27"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "24.5"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "25.75"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "19.22232027"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "96.11160135"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "494.9747468"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 3,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "500"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "31.5"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "32.2"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "31.85"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "21.97802198"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "109.8901099"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "700"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 4,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "750"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "40"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "38"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "39"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "21.98260026"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "109.9130013"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "857.32141"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 5,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "1000"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "44"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "51.28"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "47.64"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "20.77979626"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "103.8989813"
+          },
+          {
+            "field": "Root T",
+            "variable": "rt",
+            "unit": "",
+            "value": "989.9494937"
+          }
+        ]
+      }
+    ],
+    "results": []
+  },
+  {
+    "id": 2,
+    "experiment": "Sonometer",
+    "experiment_slug": "sonometer",
+    "sample_id": "1",
+    "notes": "",
+    "status": "submitted",
+    "submitted_by": "sroychow",
+    "created_at": "2026-05-26T08:19:38.688244+00:00",
+    "updated_at": "2026-05-26T08:19:38.688253+00:00",
+    "rows": [
+      {
+        "table": "Main observations",
+        "serial_number": 1,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "0"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "16.1"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "16.5"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "16.3"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "0"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 2,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "250"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "28.3"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "28.3"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "28.3"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "17.49027374"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "87.4513687"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 3,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "500"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "38"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "37.2"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "37.6"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "18.61702128"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "93.0851064"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 4,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "750"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "43.2"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "42.2"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "42.7"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "20.07778478"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "100.3889239"
+          }
+        ]
+      },
+      {
+        "table": "Main observations",
+        "serial_number": 5,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "1000"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "48.7"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "49.1"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "48.9"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "20.24436592"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "101.2218296"
+          }
+        ]
+      }
+    ],
+    "results": []
+  },
+  {
+    "id": 1,
+    "experiment": "Sonometer",
+    "experiment_slug": "sonometer",
+    "sample_id": "",
+    "notes": "",
+    "status": "submitted",
+    "submitted_by": "sroychow",
+    "created_at": "2026-05-26T08:18:10.661309+00:00",
+    "updated_at": "2026-05-26T08:18:10.661318+00:00",
+    "rows": [
+      {
+        "table": "Main observations",
+        "serial_number": 1,
+        "values": [
+          {
+            "field": "Mass (M)",
+            "variable": "M",
+            "unit": "gm",
+            "value": "250"
+          },
+          {
+            "field": "Length increasing (l1)",
+            "variable": "l1",
+            "unit": "cm",
+            "value": "28"
+          },
+          {
+            "field": "Length decreasing (l)",
+            "variable": "l2",
+            "unit": "cm",
+            "value": "28"
+          },
+          {
+            "field": "Mean Length",
+            "variable": "l",
+            "unit": "cm",
+            "value": "28"
+          },
+          {
+            "field": "Root T/L",
+            "variable": "rtl",
+            "unit": "dyne/cm",
+            "value": "17.67766953"
+          },
+          {
+            "field": "Frequency",
+            "variable": "n",
+            "unit": "Hz",
+            "value": "88.38834765"
+          }
+        ]
+      }
+    ],
+    "results": []
+  }
+]

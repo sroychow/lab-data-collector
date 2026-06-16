@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sonometer | LabVault Snapshot</title>
+  <link rel="stylesheet" href="/lab-data-collector/assets/css/styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="/lab-data-collector/">LabVault Snapshot</a>
+      <nav class="actions">
+        <a class="btn btn-secondary" href="/lab-data-collector/">Experiments</a>
+        <a class="btn btn-secondary" href="/lab-data-collector/submissions/">Submissions</a>
+        <a class="btn btn-secondary" href="/lab-data-collector/data/experiments.json">JSON</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <section class="notice">
+      Read-only public snapshot generated on 16 Jun 2026, 11:13 AM.
+      Live updates are maintained on the local Django server.
+    </section>
+    
+    <section class="card hero">
+      <h1>Sonometer</h1>
+      <p class="muted">No course/project · Protocol v1 · active</p>
+      <p></p>
+    </section>
+    
+        <section class="card">
+          <h2>Submitted entries</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Entry</th><th>Sample / Run ID</th><th>Submitted by</th><th>Created</th><th></th></tr>
+              </thead>
+              <tbody>
+        <tr>
+          <td>#5</td>
+          <td>—</td>
+          <td>sroychow</td>
+          <td>02 Jun 2026, 05:59 PM</td>
+          <td><a class="btn btn-secondary" href="/lab-data-collector/submissions/5/">Open data</a></td>
+        </tr>
+        <tr>
+          <td>#4</td>
+          <td>4</td>
+          <td>sroychow</td>
+          <td>02 Jun 2026, 04:43 PM</td>
+          <td><a class="btn btn-secondary" href="/lab-data-collector/submissions/4/">Open data</a></td>
+        </tr>
+        <tr>
+          <td>#3</td>
+          <td>3</td>
+          <td>sroychow</td>
+          <td>02 Jun 2026, 04:39 PM</td>
+          <td><a class="btn btn-secondary" href="/lab-data-collector/submissions/3/">Open data</a></td>
+        </tr>
+        <tr>
+          <td>#2</td>
+          <td>1</td>
+          <td>sroychow</td>
+          <td>26 May 2026, 01:49 PM</td>
+          <td><a class="btn btn-secondary" href="/lab-data-collector/submissions/2/">Open data</a></td>
+        </tr>
+        <tr>
+          <td>#1</td>
+          <td>—</td>
+          <td>sroychow</td>
+          <td>26 May 2026, 01:48 PM</td>
+          <td><a class="btn btn-secondary" href="/lab-data-collector/submissions/1/">Open data</a></td>
+        </tr></tbody>
+            </table>
+          </div>
+        </section>
+    
+        <section class="card">
+          <h2>Main observations</h2>
+          <p class="muted">Variable name: <code>main</code></p>
+          <p>Default table created automatically during the multiple-table migration.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Field</th><th>Variable</th><th>Type</th><th>Unit</th><th>Required</th><th>Formula</th></tr></thead>
+              <tbody>
+            <tr>
+              <td>Mass (M)</td>
+              <td><code>M</code></td>
+              <td>decimal</td>
+              <td>gm</td>
+              <td>Yes</td>
+              <td><code>—</code></td>
+            </tr>
+            <tr>
+              <td>Length increasing (l1)</td>
+              <td><code>l1</code></td>
+              <td>decimal</td>
+              <td>cm</td>
+              <td>Yes</td>
+              <td><code>—</code></td>
+            </tr>
+            <tr>
+              <td>Length decreasing (l)</td>
+              <td><code>l2</code></td>
+              <td>decimal</td>
+              <td>cm</td>
+              <td>Yes</td>
+              <td><code>—</code></td>
+            </tr>
+            <tr>
+              <td>Mean Length</td>
+              <td><code>l</code></td>
+              <td>derived</td>
+              <td>cm</td>
+              <td>No</td>
+              <td><code>0.5*(l1+l2)</code></td>
+            </tr>
+            <tr>
+              <td>Root T/L</td>
+              <td><code>rtl</code></td>
+              <td>derived</td>
+              <td>dyne/cm</td>
+              <td>No</td>
+              <td><code>sqrt(M*980)/l</code></td>
+            </tr>
+            <tr>
+              <td>Frequency</td>
+              <td><code>n</code></td>
+              <td>derived</td>
+              <td>Hz</td>
+              <td>No</td>
+              <td><code>rtl/(2*sqrt(0.01))</code></td>
+            </tr>
+            <tr>
+              <td>Root T</td>
+              <td><code>rt</code></td>
+              <td>derived</td>
+              <td>—</td>
+              <td>No</td>
+              <td><code>sqrt(M*980.)</code></td>
+            </tr></tbody>
+            </table>
+          </div>
+        </section>
+    
+        <section class="card">
+          <h2>Configured plots</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Plot</th><th>Table</th><th>X field</th><th>Y field</th><th>Chart</th><th>Fit</th></tr></thead>
+              <tbody>
+        <tr>
+          <td>Root T vs l</td>
+          <td>Main observations</td>
+          <td>Mean Length</td>
+          <td>Root T</td>
+          <td>scatter</td>
+          <td>linear</td>
+        </tr></tbody>
+            </table>
+          </div>
+        </section>
+    
+  </main>
+  <script src="/lab-data-collector/assets/js/site.js"></script>
+</body>
+</html>

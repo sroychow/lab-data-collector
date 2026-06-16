@@ -1,38 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>LabVault Experiments</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+  <meta charset="UTF-8">
+  <title>Home | LabVault Snapshot</title>
+  <link rel="stylesheet" href="/lab-data-collector/assets/css/styles.css">
 </head>
 <body>
-    <header class="header">
-        <div class="header-inner">
-            <a class="brand" href="index.html">LabVault</a>
-            <div class="actions">
-                <a class="btn btn-secondary" href="submission.html">Submissions</a>
-                <a class="btn btn-secondary" href="admin.html">
-                   Admin Panel 
-                </a>
-                <span id="userBox" class="muted"></span>
-                <button id="logoutButton" class="btn-secondary">Logout</button>
-            </div>
-        </div>
-    </header>
-
-    <main class="container">
-        <section class="card">
-            <h1>Active experiments</h1>
-            <p class="muted">Choose an experiment to view the schema, submit observations, or inspect submitted data.</p>
-            <p id="errorBox" class="error"></p>
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="/lab-data-collector/">LabVault Snapshot</a>
+      <nav class="actions">
+        <a class="btn btn-secondary" href="/lab-data-collector/">Experiments</a>
+        <a class="btn btn-secondary" href="/lab-data-collector/submissions/">Submissions</a>
+        <a class="btn btn-secondary" href="/lab-data-collector/data/experiments.json">JSON</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <section class="notice">
+      Read-only public snapshot generated on 16 Jun 2026, 11:13 AM.
+      Live updates are maintained on the local Django server.
+    </section>
+    
+        <section class="card hero">
+          <h1>LabVault Read-only Snapshot</h1>
+          <p>This public page is generated from the local Django database. It is read-only and does not accept logins or submissions.</p>
         </section>
-
-        <section id="experimentList" class="grid"></section>
-    </main>
-
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/api.js"></script>
-    <script src="assets/js/nav.js"></script>
-    <script src="assets/js/experiments.js"></script>
+        <section class="grid">
+            <article class="card">
+              <h2>Hall Effect</h2>
+              <p class="muted">No course/project · Protocol v1 · active</p>
+              <p>To study the Hall Effect and hence determine the Hall coefficient (𝑹𝑯) and carrier density(𝒏) of a given semiconductor.</p>
+              <p class="muted">Submissions in snapshot: 0</p>
+              <a class="btn" href="/lab-data-collector/experiments/hall-effect/">Open experiment</a>
+            </article>
+            <article class="card">
+              <h2>Sonometer</h2>
+              <p class="muted">No course/project · Protocol v1 · active</p>
+              <p></p>
+              <p class="muted">Submissions in snapshot: 5</p>
+              <a class="btn" href="/lab-data-collector/experiments/sonometer/">Open experiment</a>
+            </article></section>
+        
+  </main>
+  <script src="/lab-data-collector/assets/js/site.js"></script>
 </body>
 </html>
